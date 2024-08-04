@@ -108,7 +108,7 @@ class UrlServiceTest {
         void shouldThrowExceptionIfIdAlreadyExists() {
             when(urlRepository.existsById(id)).thenReturn(true);
 
-            final var thrown = catchThrowable(() -> callService());
+            final var thrown = catchThrowable(this::callService);
 
             assertThat(thrown).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("ID: " + id + " already in use");
@@ -118,7 +118,7 @@ class UrlServiceTest {
         void shouldNotThrowExceptionIfIdDoesNotExist() {
             when(urlRepository.existsById(id)).thenReturn(false);
 
-            assertThatCode(() -> callService()).doesNotThrowAnyException();
+            assertThatCode(this::callService).doesNotThrowAnyException();
         }
 
         private void callService() {
@@ -227,7 +227,7 @@ class UrlServiceTest {
         void shouldThrowNotFoundExceptionIfUrlNotFound() {
             when(urlRepository.findById(id)).thenReturn(Optional.empty());
 
-            assertThatThrownBy(() -> callService())
+            assertThatThrownBy(this::callService)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("No URL found for ID")
                 .extracting("status")
@@ -248,7 +248,7 @@ class UrlServiceTest {
             urlEntity.setExpirationDate(LocalDateTime.now().minusDays(1));
             when(urlRepository.findById(id)).thenReturn(Optional.of(urlEntity));
 
-            assertThatThrownBy(() -> callService())
+            assertThatThrownBy(this::callService)
                 .isInstanceOf(UrlExpiredException.class)
                 .hasMessageContaining(id);
             verify(urlRepository).delete(urlEntity);
@@ -286,7 +286,7 @@ class UrlServiceTest {
         void shouldThrowExceptionIfUrlDoesNotExist() {
             when(urlRepository.existsById(id)).thenReturn(false);
 
-            final var thrown = catchThrowable(() -> callService());
+            final var thrown = catchThrowable(this::callService);
 
             assertThat(thrown).isInstanceOf(ResponseStatusException.class)
                 .hasMessageContaining("No URL found for ID");
