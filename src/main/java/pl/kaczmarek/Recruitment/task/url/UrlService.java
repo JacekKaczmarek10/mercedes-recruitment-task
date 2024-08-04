@@ -45,13 +45,13 @@ public class UrlService {
         return urlEntity;
     }
 
-    UrlEntity saveUrlEntity(UrlEntity urlEntity) {
-        UrlEntity savedUrlEntity = urlRepository.save(urlEntity);
+    UrlEntity saveUrlEntity(final UrlEntity urlEntity) {
+        final var savedUrlEntity = urlRepository.save(urlEntity);
         log.info("Created short URL: {} -> {}", savedUrlEntity.getId(), savedUrlEntity.getLongUrl());
         return savedUrlEntity;
     }
 
-    UrlResponse createUrlResponse(UrlEntity savedUrlEntity) {
+    UrlResponse createUrlResponse(final UrlEntity savedUrlEntity) {
         return new UrlResponse(
             savedUrlEntity.getId(),
             savedUrlEntity.getLongUrl(),
@@ -59,7 +59,7 @@ public class UrlService {
         );
     }
 
-    String getLongUrl(String id) {
+    String getLongUrl(final String id) {
         final var urlEntity = urlRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No URL found for ID"));
 
@@ -73,7 +73,7 @@ public class UrlService {
         }
     }
 
-    void deleteShortUrl(String id) {
+    void deleteShortUrl(final String id) {
         if (urlRepository.existsById(id)) {
             urlRepository.deleteById(id);
             log.info("Deleted short URL: {}", id);
@@ -81,4 +81,5 @@ public class UrlService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No URL found for ID");
         }
     }
+
 }

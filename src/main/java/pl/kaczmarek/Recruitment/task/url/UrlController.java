@@ -3,7 +3,6 @@ package pl.kaczmarek.Recruitment.task.url;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -17,7 +16,7 @@ class UrlController {
     private final UrlService urlService;
 
     @PostMapping("/shorten")
-    ResponseEntity<UrlResponse> createShortUrl(@RequestBody @Validated UrlRequest urlRequest) {
+    ResponseEntity<UrlResponse> createShortUrl(@RequestBody UrlRequest urlRequest) {
         return ResponseEntity.ok(urlService.createShortUrl(urlRequest));
     }
 
