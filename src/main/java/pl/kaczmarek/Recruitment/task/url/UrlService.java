@@ -1,12 +1,11 @@
 package pl.kaczmarek.Recruitment.task.url;
 
-import static pl.kaczmarek.Recruitment.task.common.IdGenerator.generateUniqueId;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import pl.kaczmarek.Recruitment.task.common.IdGenerator;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +13,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Slf4j
 public class UrlService {
+
+    private final IdGenerator idGenerator;
 
     private final UrlRepository urlRepository;
 
@@ -33,7 +34,7 @@ public class UrlService {
 
     UrlEntity createUrlEntity(final UrlRequest urlRequest) {
         final var urlEntity = new UrlEntity();
-        urlEntity.setId(urlRequest.id() != null ? urlRequest.id() : generateUniqueId());
+        urlEntity.setId(urlRequest.id() != null ? urlRequest.id() : idGenerator.generateUniqueId());
         urlEntity.setLongUrl(urlRequest.longUrl());
 
         if (urlRequest.ttl() != null) {

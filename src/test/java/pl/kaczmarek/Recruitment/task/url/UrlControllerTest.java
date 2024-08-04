@@ -77,17 +77,17 @@ class UrlControllerTest extends ControllerTest {
 
         @Test
         void shouldCallService() throws Exception {
-            doRequest(id);
+            doRequest();
 
             verify(urlService).getLongUrl(id);
         }
 
         @Test
         void shouldReturnRedirect() throws Exception {
-            doRequest(id).andExpect(status().isFound()).andExpect(header().string("Location", longUrl));
+            doRequest().andExpect(status().isFound()).andExpect(header().string("Location", longUrl));
         }
 
-        private ResultActions doRequest(final String id) throws Exception {
+        private ResultActions doRequest() throws Exception {
             return mockMvc.perform(get("/api/{id}", id));
         }
     }
