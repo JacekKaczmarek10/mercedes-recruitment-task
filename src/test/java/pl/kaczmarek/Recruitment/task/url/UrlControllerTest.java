@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,9 +16,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-
-import java.net.URISyntaxException;
 
 @WebMvcTest(UrlController.class)
 class UrlControllerTest extends ControllerTest {
@@ -81,26 +77,17 @@ class UrlControllerTest extends ControllerTest {
 
         @Test
         void shouldCallService() throws Exception {
-            doRequest();
+            doRequest(id);
 
             verify(urlService).getLongUrl(id);
         }
 
         @Test
         void shouldReturnRedirect() throws Exception {
-            doRequest().andExpect(status().isFound()).andExpect(header().string("Location", longUrl));
+            doRequest(id).andExpect(status().isFound()).andExpect(header().string("Location", longUrl));
         }
 
-        @Test
-        @Disabled
-        void shouldReturnBadRequestForMalformedUrl() throws Exception {
-            when(urlService.getLongUrl(id)).thenThrow(new URISyntaxException(longUrl, "Malformed URL"));
-
-            doRequest().andExpect(status().isBadRequest())
-                .andExpect(content().string("The URL provided is malformed and cannot be redirected."));
-        }
-
-        private ResultActions doRequest() throws Exception {
+        private ResultActions doRequest(final String id) throws Exception {
             return mockMvc.perform(get("/api/{id}", id));
         }
     }

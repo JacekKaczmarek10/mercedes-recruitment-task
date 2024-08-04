@@ -59,7 +59,7 @@ public class UrlService {
         );
     }
 
-    String getLongUrl(final String id) {
+    String getLongUrl(final String id) throws UrlExpiredException {
         final var urlEntity = urlRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No URL found for ID"));
 
