@@ -29,8 +29,7 @@ http://localhost:8080/h2-console
 ## Code coverage
 
 > score>85%
-![image](https://github.com/JacekKaczmarek10/recruitment-task/assets/58121352/6e2a7b6b-b10c-499e-a8a3-603d58149c33)
-
+![img.png](img.png)
 
 ## Copyright
 
