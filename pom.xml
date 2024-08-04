@@ -14,7 +14,7 @@
 	<name>Recruitment-task</name>
 	<description>Recruitment task for mercedes company.</description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -24,6 +24,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.14.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
