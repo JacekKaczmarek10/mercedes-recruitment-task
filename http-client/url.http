@@ -3,7 +3,6 @@ POST http://localhost:8080/api/shorten
 Content-Type: application/json
 
 {
-  "id": "test1",
   "longUrl": "test1",
   "ttl": 3600
 }

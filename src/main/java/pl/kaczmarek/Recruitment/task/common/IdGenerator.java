@@ -3,6 +3,7 @@ package pl.kaczmarek.Recruitment.task.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.kaczmarek.Recruitment.task.url.UrlRepository;
 
 @Service
 @Slf4j
@@ -13,22 +14,28 @@ public class IdGenerator {
     private static final int BASE = ALPHANUMERIC.length();
 
     private final LastGeneratedIdRepository lastGeneratedIdRepository;
+    private final UrlRepository urlRepository;
 
     public synchronized String generateUniqueId() {
-        final var lastGeneratedId = lastGeneratedIdRepository.findById(1L)
+        String newId;
+        LastGeneratedId lastGeneratedId;
+        do {
+            lastGeneratedId = lastGeneratedIdRepository.findById(1L)
                 .orElseGet(() -> new LastGeneratedId(1L, "A"));
 
-        final var lastId = lastGeneratedId.getLastId();
-        final var newId = incrementId(lastId);
+            final var lastId = lastGeneratedId.getLastId();
+            newId = incrementId(lastId);
 
-        lastGeneratedId.setLastId(newId);
+            lastGeneratedId.setLastId(newId);
+        } while (urlRepository.existsById(newId));
+
         lastGeneratedIdRepository.save(lastGeneratedId);
 
         log.debug("Generated unique ID: {}", newId);
         return newId;
     }
 
-    private String incrementId(String id) {
+    String incrementId(String id) {
         final var chars = id.toCharArray();
         final var length = chars.length;
 
@@ -42,4 +49,5 @@ public class IdGenerator {
         }
         return ALPHANUMERIC.charAt(0) + new String(chars);
     }
+
 }
