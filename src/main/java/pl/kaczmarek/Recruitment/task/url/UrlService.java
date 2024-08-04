@@ -56,7 +56,7 @@ public class UrlService {
         return new UrlResponse(
             savedUrlEntity.getId(),
             savedUrlEntity.getLongUrl(),
-            "http://localhost:8080/api" + savedUrlEntity.getId()
+            "http://localhost:8080/api/" + savedUrlEntity.getId()
         );
     }
 

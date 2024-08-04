@@ -33,7 +33,7 @@ class UrlServiceTest {
     @Mock
     private IdGenerator idGenerator;
 
-    private final String shortUrl = "http://localhost:8080/api";
+    private final String shortUrl = "http://localhost:8080/api/";
     private final String exampleUrl = "https://example.com";
 
     @Nested
