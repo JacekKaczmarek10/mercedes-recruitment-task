@@ -33,14 +33,17 @@ class UrlServiceTest {
     @Mock
     private IdGenerator idGenerator;
 
+    private final String shortUrl = "http://localhost:8080/api";
+    private final String exampleUrl = "https://example.com";
+
     @Nested
     class CreateShortUrlTest {
 
         private final String id = "shortId";
-        private final String longUrl = "https://example.com";
+        private final String longUrl = exampleUrl;
         private final UrlRequest urlRequest = new UrlRequest(id, longUrl, null);
         private final UrlEntity urlEntity = new UrlEntity();
-        private final UrlResponse urlResponse = new UrlResponse(id, longUrl, "http://localhost:8080/" + id);
+        private final UrlResponse urlResponse = new UrlResponse(id, longUrl, shortUrl + id);
 
         @BeforeEach
         void setUp() {
@@ -128,7 +131,7 @@ class UrlServiceTest {
     @Nested
     class CreateUrlEntityTest {
 
-        private final UrlRequest urlRequest = new UrlRequest("shortId", "http://example.com", 3600L);
+        private final UrlRequest urlRequest = new UrlRequest("shortId", exampleUrl, 3600L);
 
         @Test
         void shouldCreateUrlEntityWithTtl() {
@@ -144,7 +147,7 @@ class UrlServiceTest {
 
         @Test
         void shouldCreateUrlEntityWithoutTtl() {
-            final var requestWithoutTtl = new UrlRequest("shortId", "http://example.com", null);
+            final var requestWithoutTtl = new UrlRequest("shortId", exampleUrl, null);
             final var entity = urlService.createUrlEntity(requestWithoutTtl);
 
             assertThat(entity.getExpirationDate()).isNull();
@@ -173,7 +176,7 @@ class UrlServiceTest {
         @Test
         void shouldCreateUrlResponse() {
             final String id = "shortId";
-            final String longUrl = "https://example.com";
+            final String longUrl = exampleUrl;
             final UrlEntity urlEntity = new UrlEntity();
             urlEntity.setId(id);
             urlEntity.setLongUrl(longUrl);
@@ -183,7 +186,7 @@ class UrlServiceTest {
             assertThat(urlResponse).isNotNull();
             assertThat(urlResponse.id()).isEqualTo(id);
             assertThat(urlResponse.longUrl()).isEqualTo(longUrl);
-            assertThat(urlResponse.shortUrl()).isEqualTo("http://localhost:8080/" + id);
+            assertThat(urlResponse.shortUrl()).isEqualTo(shortUrl + id);
         }
 
         @Test
@@ -194,7 +197,7 @@ class UrlServiceTest {
 
             final var urlResponse = urlService.createUrlResponse(urlEntity);
 
-            assertThat(urlResponse.shortUrl()).isEqualTo("http://localhost:8080/" + id);
+            assertThat(urlResponse.shortUrl()).isEqualTo(shortUrl + id);
         }
     }
 
@@ -202,7 +205,7 @@ class UrlServiceTest {
     class GetLongUrlTest {
 
         private final String id = "shortId";
-        private final String longUrl = "https://example.com";
+        private final String longUrl = exampleUrl;
         private final UrlEntity urlEntity = new UrlEntity();
 
         @BeforeEach

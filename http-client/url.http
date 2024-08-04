@@ -3,12 +3,13 @@ POST http://localhost:8080/api/shorten
 Content-Type: application/json
 
 {
-  "longUrl": "test1",
+  "id": "sofia2",
+  "longUrl": "https://codepred.pl/",
   "ttl": 3600
 }
 
 ### Read long URL (redirect)
-GET http://localhost:8080/api/test1
+GET http://localhost:8080/api/sofia1
 
 ### Delete the shortened URL
-DELETE http://localhost:8080/api/customId
+DELETE http://localhost:8080/api/sofia
