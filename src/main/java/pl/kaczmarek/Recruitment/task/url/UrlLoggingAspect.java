@@ -37,7 +37,7 @@ class UrlLoggingAspect {
     }
 
     @AfterReturning(pointcut = "execution(* pl.kaczmarek.Recruitment.task.url.UrlController.*(..))", returning = "result")
-    public void logResponse(JoinPoint joinPoint, Object result) {
+    public void logResponse(Object result) {
         if (result instanceof ResponseEntity<?> responseEntity) {
             final var responseBody = responseEntity.getBody();
             logger.info("Response Body: {}", responseBody);
