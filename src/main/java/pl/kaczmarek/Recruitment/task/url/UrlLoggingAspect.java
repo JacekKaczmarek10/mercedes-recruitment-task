@@ -30,9 +30,9 @@ class UrlLoggingAspect {
         final var attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             final var request = attributes.getRequest();
-            logger.info("Request URL: " + request.getRequestURL().toString());
-            logger.info("HTTP Method: " + request.getMethod());
-            logger.info("Arguments: " + Arrays.toString(joinPoint.getArgs()));
+            logger.info("Request URL: {}", request.getRequestURL().toString());
+            logger.info("HTTP Method: {}", request.getMethod());
+            logger.info("Arguments: {}", Arrays.toString(joinPoint.getArgs()));
         }
     }
 
@@ -40,7 +40,7 @@ class UrlLoggingAspect {
     public void logResponse(JoinPoint joinPoint, Object result) {
         if (result instanceof ResponseEntity<?> responseEntity) {
             final var responseBody = responseEntity.getBody();
-            logger.info("Response Body: " + responseBody);
+            logger.info("Response Body: {}", responseBody);
         }
     }
 }
