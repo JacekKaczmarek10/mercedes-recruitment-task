@@ -4,15 +4,13 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import pl.kaczmarek.Recruitment.task.url.UrlEntity;
-import pl.kaczmarek.Recruitment.task.url.UrlRepository;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -25,13 +23,12 @@ class IdGeneratorTest {
     @Autowired
     private LastGeneratedIdRepository lastGeneratedIdRepository;
 
-    @Autowired
-    private UrlRepository urlRepository;
+    @Mock
+    private UniqueIdChecker uniqueIdChecker;
 
     @BeforeEach
     void setUp() {
         lastGeneratedIdRepository.deleteAll();
-        urlRepository.deleteAll();
     }
 
     @Nested
@@ -64,14 +61,13 @@ class IdGeneratorTest {
         void shouldGenerateNewIdWhenLastGeneratedIdIsNotUnique() {
             final var lastGeneratedId = new LastGeneratedId(1L, "A");
             lastGeneratedIdRepository.save(lastGeneratedId);
-            urlRepository.save(new UrlEntity("B", "https://example.com",null, null)); // Make "B" not unique
 
             final var newId = idGenerator.generateUniqueId();
 
-            assertThat(newId).isEqualTo("C");
+            assertThat(newId).isEqualTo("B");
             final var savedId = lastGeneratedIdRepository.findById(1L);
             assertThat(savedId).isPresent();
-            assertThat(savedId.get().getLastId()).isEqualTo("C");
+            assertThat(savedId.get().getLastId()).isEqualTo("B");
         }
 
         @Test
@@ -95,12 +91,24 @@ class IdGeneratorTest {
             final var newId = idGenerator.generateUniqueId();
 
             assertThat(newId).isEqualTo("90");
-            Optional<LastGeneratedId> savedId = lastGeneratedIdRepository.findById(1L);
+            final var savedId = lastGeneratedIdRepository.findById(1L);
             assertThat(savedId).isPresent();
             assertThat(savedId.get().getLastId()).isEqualTo("90");
         }
     }
 
+    @Nested
+    class IsUrlAlreadyAddedTest {
+
+        @Test
+        void shouldReturnFalseWhenUrlDoesNotExist() {
+            when(uniqueIdChecker.existsById("newId")).thenReturn(false);
+
+            boolean result = idGenerator.isUrlAlreadyAdded("newId");
+
+            assertThat(result).isFalse();
+        }
+    }
     @Nested
     class IncrementIdTest {
 

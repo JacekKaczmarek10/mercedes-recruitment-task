@@ -12,9 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LastGeneratedId {
+class LastGeneratedId {
 
     @Id
     private Long id;
+
     private String lastId;
+
 }

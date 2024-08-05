@@ -3,7 +3,6 @@ package pl.kaczmarek.Recruitment.task.common;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.kaczmarek.Recruitment.task.url.UrlRepository;
 
 @Service
 @Slf4j
@@ -14,7 +13,7 @@ public class IdGenerator {
     private static final int BASE = ALPHANUMERIC.length();
 
     private final LastGeneratedIdRepository lastGeneratedIdRepository;
-    private final UrlRepository urlRepository;
+    private final UniqueIdChecker uniqueIdChecker;
 
     public synchronized String generateUniqueId() {
         String newId;
@@ -27,12 +26,16 @@ public class IdGenerator {
             newId = incrementId(lastId);
 
             lastGeneratedId.setLastId(newId);
-        } while (urlRepository.existsById(newId));
+        } while (isUrlAlreadyAdded(newId));
 
         lastGeneratedIdRepository.save(lastGeneratedId);
 
         log.debug("Generated unique ID: {}", newId);
         return newId;
+    }
+
+    public boolean isUrlAlreadyAdded(final String newId) {
+        return uniqueIdChecker.existsById(newId);
     }
 
     String incrementId(String id) {
@@ -49,5 +52,4 @@ public class IdGenerator {
         }
         return ALPHANUMERIC.charAt(0) + new String(chars);
     }
-
 }

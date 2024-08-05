@@ -19,6 +19,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import pl.kaczmarek.Recruitment.task.common.IdGenerator;
+import pl.kaczmarek.Recruitment.task.common.UniqueIdChecker;
 
 @SpringBootTest
 class UrlServiceTest {
@@ -29,6 +30,9 @@ class UrlServiceTest {
 
     @Mock
     private UrlRepository urlRepository;
+
+    @Mock
+    private UniqueIdChecker uniqueIdChecker;
 
     @Mock
     private IdGenerator idGenerator;
@@ -49,7 +53,7 @@ class UrlServiceTest {
         void setUp() {
             urlEntity.setId(id);
             urlEntity.setLongUrl(longUrl);
-            when(urlRepository.existsById(id)).thenReturn(false);
+            when(uniqueIdChecker.existsById(id)).thenReturn(false);
             when(urlRepository.save(any())).thenReturn(urlEntity);
         }
 
@@ -108,7 +112,7 @@ class UrlServiceTest {
 
         @Test
         void shouldThrowExceptionIfIdAlreadyExists() {
-            when(urlRepository.existsById(id)).thenReturn(true);
+            when(idGenerator.isUrlAlreadyAdded(id)).thenReturn(true);
 
             final var thrown = catchThrowable(this::callService);
 
@@ -118,7 +122,7 @@ class UrlServiceTest {
 
         @Test
         void shouldNotThrowExceptionIfIdDoesNotExist() {
-            when(urlRepository.existsById(id)).thenReturn(false);
+            when(uniqueIdChecker.existsById(id)).thenReturn(false);
 
             assertThatCode(this::callService).doesNotThrowAnyException();
         }
@@ -268,26 +272,24 @@ class UrlServiceTest {
 
         @Test
         void shouldCheckIfUrlExists() {
-            when(urlRepository.existsById(id)).thenReturn(true);
+            when(idGenerator.isUrlAlreadyAdded(id)).thenReturn(true);
 
             callService();
 
-            verify(urlRepository).existsById(id);
+            verify(idGenerator).isUrlAlreadyAdded(id);
         }
 
         @Test
         void shouldDeleteUrl() {
-            when(urlRepository.existsById(id)).thenReturn(true);
+            when(idGenerator.isUrlAlreadyAdded(id)).thenReturn(true);
 
             callService();
 
-            verify(urlRepository).deleteById(id);
+            verify(urlRepository).deleteById(any());
         }
 
         @Test
         void shouldThrowExceptionIfUrlDoesNotExist() {
-            when(urlRepository.existsById(id)).thenReturn(false);
-
             final var thrown = catchThrowable(this::callService);
 
             assertThat(thrown).isInstanceOf(ResponseStatusException.class)

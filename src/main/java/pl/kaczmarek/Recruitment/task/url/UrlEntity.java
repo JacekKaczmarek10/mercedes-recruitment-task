@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UrlEntity {
+class UrlEntity {
 
     @Id
     @Column(unique = true)

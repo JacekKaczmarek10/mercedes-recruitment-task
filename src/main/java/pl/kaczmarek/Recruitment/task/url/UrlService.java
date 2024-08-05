@@ -12,10 +12,9 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UrlService {
+class UrlService {
 
     private final IdGenerator idGenerator;
-
     private final UrlRepository urlRepository;
 
     UrlResponse createShortUrl(final UrlRequest urlRequest) {
@@ -26,7 +25,7 @@ public class UrlService {
     }
 
     void checkIfUrlAlreadyExists(final String id) {
-        if (id != null && urlRepository.existsById(id)) {
+        if (id != null && idGenerator.isUrlAlreadyAdded(id)) {
             log.error("ID already in use: {}", id);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID: " + id + " already in use");
         }
@@ -75,7 +74,7 @@ public class UrlService {
     }
 
     void deleteShortUrl(final String id) {
-        if (urlRepository.existsById(id)) {
+        if (idGenerator.isUrlAlreadyAdded(id)) {
             urlRepository.deleteById(id);
             log.info("Deleted short URL: {}", id);
         } else {
