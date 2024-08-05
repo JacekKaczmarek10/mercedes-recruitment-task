@@ -1,6 +1,6 @@
 package pl.kaczmarek.Recruitment.task.url;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,7 +8,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
+@RequiredArgsConstructor
 class UrlController {
 
     private final UrlService urlService;
