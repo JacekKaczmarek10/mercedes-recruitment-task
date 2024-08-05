@@ -1,4 +1,4 @@
-# mercedes-recrutiment-task
+# recrutiment-task
 
 Recrutiment task, REST API in Java and Spring boot.
 
