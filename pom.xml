@@ -12,7 +12,7 @@
 	<artifactId>Recruitment-task</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Recruitment-task</name>
-	<description>Recruitment task for mercedes company.</description>
+	<description>Recruitment task for company.</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

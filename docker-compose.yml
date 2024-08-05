@@ -1,11 +1,11 @@
 version: '3.8'
 services:
-  mercedes-app:
-    image: mercedes-app:latest
+  recruitment-app:
+    image: recruitment-app:latest
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: mercedes-app
+    container_name: recruitment-app
     restart: unless-stopped
     ports:
       - "8080:8080"
